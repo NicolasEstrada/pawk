@@ -42,3 +42,9 @@ To get docker app ip:
 ```bash
 docker-machine ip MACHINE_VM
 ```
+
+For local testing, you need to add the following entry in `/etc/hosts`:
+
+```bash
+127.0.0.1       localhost kafka
+```
