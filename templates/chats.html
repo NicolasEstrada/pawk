@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+
+
+{% block content %}
+
+<style>
+
+tr.border_bottom td {
+    border-bottom: 1pt solid black;
+}
+
+tr.border_top td {
+  border-top:1pt solid black;
+}
+
+
+</style>
+    <main>
+        <div>
+            <h3>Chat room - PAWK</h3>
+
+            <table style="width:100%">
+
+                {% for chat in chats %}
+
+                <tr style="font-weight:bold">
+                    <td>{{ chat.username }}</td>
+                </tr>
+                <tr class="border_bottom">
+                    <td>{{ chat.content }}</td><td style="text-align:right">{{ chat.datetime }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+        <div>
+            <form method="POST" action="/chat/send/{{ user }}" target="dummy-frame">
+                {{ form.hidden_tag() }}
+                <tr class="border_top">
+                    <td>{{ form.message.label }}</td><td style="text-align:right">{{ form.message }}</td><td>{{ form.submit(class="btn-primary") }}</td>
+                </tr>
+            </form>
+        </div>
+    </main>
+
+<iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+{% endblock %}
