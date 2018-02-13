@@ -1,14 +1,5 @@
-version: '0.0.1'
+version: '0.1.0'
 services:
-  web:
-    build: .
-    ports:
-      - "5000:5000"
-    volumes:
-      - .:/app
-    links:
-      - zookeeper
-      - kafka
   kafka:
     image: "wurstmeister/kafka"
     ports:
@@ -25,3 +16,12 @@ services:
     image: wurstmeister/zookeeper
     ports:
       - "2181:2181"
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+    links:
+      - zookeeper
+      - kafka

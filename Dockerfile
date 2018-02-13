@@ -14,4 +14,4 @@ RUN pip install -r requirements.txt
 ADD . /app
 
 # Run app.py
-CMD ["python", "app.py"]
+CMD ["python", "chat.py"]

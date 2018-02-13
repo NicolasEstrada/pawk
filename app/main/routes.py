@@ -5,10 +5,6 @@ from kafka import KafkaProducer, KafkaConsumer, TopicPartition
 from flask import Flask, render_template, request
 from forms import SignupForm, ChatForm
 
-producer = KafkaProducer(
-        bootstrap_servers=['kafka:9092'],
-        value_serializer=lambda v: json.dumps(v).encode('utf-8'))
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 
@@ -20,21 +16,28 @@ def index():
 
 @app.route("/chat/send/<user>", methods=['POST'])
 def chat_send(user):
+    producer = KafkaProducer(
+        bootstrap_servers=['kafka:9092'],
+        value_serializer=lambda v: json.dumps(v).encode('utf-8'))
     form = ChatForm()
+    user = user if user is not None else form.user.data
     future = producer.send(
         'pawk',
         {
-            "username": user if user is not None else form.user.data,
+            "username": user,
             "timestamp": arrow.utcnow().float_timestamp,
             "content": form.message.data
         })
     _ = future.get(timeout=1)
 
-    return get(form.user.data)
+    return get(user)
 
 
 @app.route("/send/<user>/<message>", methods=['GET'])
 def send(user, message):
+    producer = KafkaProducer(
+        bootstrap_servers=['kafka:9092'],
+        value_serializer=lambda v: json.dumps(v).encode('utf-8'))
     print(request.form)
     future = producer.send(
         'pawk',
